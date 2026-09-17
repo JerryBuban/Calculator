@@ -112,7 +112,8 @@
     </style>
 </head>
 <body>
-<audio id="buttonSound" src="Music.mp3"></audio>
+ <audio id="percentSound" src="diff.mp3"></audio>
+<audio id="buttonSound" src="Music.mp3"></audio>
 <div class="calculator">
 
     <div class="display">
@@ -128,7 +129,7 @@
 
         <button id="clear" onclick="clearDisplay()">AC</button>
         <button id="delete" onclick="deleteLast()">DEL</button>
-        <button id="percent" onclick="percent()">%</button>
+        <button id="percent" onclick="percent(); playmusic()">%</button>
         <button class="operator" onclick="appendOperator('/')">÷</button>
 
         <button class="number" onclick="appendNumber('7')">7</button>
@@ -163,6 +164,11 @@ function playSound() {
     sound.currentTime = 0;
     sound.play();
 }
+    function playmusic(){
+            const sound = document.getElementById("percentSound");
+            sound.currentTime = 0;
+            sound.play();
+        }
     function appendNumber(number) {
         document.getElementById("display").value += number;
     }
@@ -184,8 +190,73 @@ function playSound() {
         display.value = display.value.slice(0, -1);
     }
 
-    function percent() {
+    const display = document.getElementById("display");
+
+    const lyrics = [
+        { text: "'Cause", delay: 300 },
+        { text: "She moved on", delay: 1500 },
+        { text: "While I'm still", delay: 1000 },
+        { text: "Grieving", delay: 1600 },
+        { text: "—", delay: 950},
+        { text: "And when a", delay: 700},
+        { text: "Heart breaks",delay:700},
+        { text: "No it don't",delay:700},
+        { text: "Breakeven",delay:1000},
+        { text: "Even",delay:990},
+        { text: "No",delay:1600},
+        { text: "What am I",delay:600},
+        { text: "Gonna do",delay:1100 },
+        { text: "When the best",delay:900},
+        { text: "Part of me",delay:800},
+        { text: "Was always you",delay:1100},
+        { text: "And what am I", delay: 1700},
+        { text: "Supposed",delay:400},
+        { text: "To say",delay:600},
+        { text: "When I'm all",delay:700},
+        { text: "Choked up",delay:600},
+        { text: "And you're",delay:600},
+        { text: "Okay",delay:1800},
+        { text: "I'm falling",delay:1100},
+        { text: "To pieces", delay:1700},
+        
+    ];
+
+   let white = false;
+
+    const flicker = setInterval(() => {
+        if (white) {
+            display.style.backgroundColor = "white";
+            display.style.color = "black";
+        } else {
+            display.style.backgroundColor = "black";
+            display.style.color = "white";
+        }
+
+        white = !white;
+    }, 170);
+
+    let line = 0;
+
+    function showLine() {
+        if (line >= lyrics.length) {
+            clearInterval(flicker);
+
+            display.style.backgroundColor = "";
+            display.style.color = "";
+
+            return;
+        }
+
+        display.value = lyrics[line].text;
+
+        setTimeout(() => {
+            line++;
+            showLine();
+        }, lyrics[line].delay);
     }
+
+    showLine();
+}
 
     function toggleSign() {
     }
